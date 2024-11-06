@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "392556895404",
+    "project_id": "as-academy-a7a8f",
+    "storage_bucket": "as-academy-a7a8f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392556895404:android:f16b196a8d6a737430d309",
+        "android_client_info": {
+          "package_name": "com.example.incrementorstest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392556895404-mttn2pv0ec8i20qiigutsou21dqvu0mr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrY5b_BkQKOtyBPLpWkJ_oB5goVwxnjBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392556895404-6bu5r9u64279kevoegtftmgj6l56ej8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
