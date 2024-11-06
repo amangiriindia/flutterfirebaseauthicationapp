@@ -1,45 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:incrementorstest/component/custom_buttom.dart';
 
-class GetStartedScreen extends StatelessWidget {
+
+class GetStartedScreen extends StatefulWidget {
+  @override
+  _GetStartedScreenState createState() => _GetStartedScreenState();
+}
+
+class _GetStartedScreenState extends State<GetStartedScreen> {
+  String userName = "User"; // Default name
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserName();
+  }
+
+  Future<void> fetchUserName() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        if (userDoc.exists) {
+          setState(() {
+            userName = userDoc.data()?['name'] ?? "User";
+          });
+        }
+      }
+    } catch (e) {
+      print("Error fetching user name: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2355C4), // Background color: #2355C4
+      backgroundColor: const Color(0xFF2355C4),
       body: Column(
-        mainAxisAlignment:
-            MainAxisAlignment.center, // Center the content vertically
-        crossAxisAlignment:
-            CrossAxisAlignment.center, // Center the content horizontally
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Image at the top
-          Spacer(
-            flex: 2,
-          ),
+          Spacer(flex: 2),
           Image.asset(
             'assets/icon/icon.png',
             width: 128,
             height: 128,
           ),
-          SizedBox(height: 40), // Add space between the image and the text
-
-          // Text for Username and account setup
-          const Text(
-            'Congratulations\nAman Giri\nYour account has been\nset up!',
+          SizedBox(height: 40),
+          Text(
+            'Congratulations\n$userName\nYour account has been\nset up!',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Manrope', // Font family Manrope
+            style: const TextStyle(
+              fontFamily: 'Manrope',
               fontSize: 28,
-              fontWeight: FontWeight.w800, // Font weight 800
-              height: 40 / 28, // line-height: 40px, based on font-size 28px
-              color: Colors.white, // Text color white
+              fontWeight: FontWeight.w800,
+              height: 40 / 28,
+              color: Colors.white,
             ),
           ),
-          SizedBox(
-              height:
-                  20), // Add space between the account setup text and the next text
-
-          // Text for customized feeds
+          SizedBox(height: 20),
           const Text(
             'We have customized feeds according to \nyour preferences.',
             textAlign: TextAlign.center,
@@ -48,14 +69,10 @@ class GetStartedScreen extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w400,
               height: 24 / 16,
-              color: Color(0xFFD2E4FC), // Text color #D2E4FC
+              color: Color(0xFFD2E4FC),
             ),
           ),
-
-          Spacer(
-            flex: 4,
-          ),
-          // Get Started Button
+          Spacer(flex: 4),
           Center(
             child: CustomButton(
               backgroundColor: const Color(0xFF59C1F2),
@@ -68,9 +85,7 @@ class GetStartedScreen extends StatelessWidget {
               text: 'Get Started',
             ),
           ),
-          Spacer(
-            flex: 1,
-          ),
+          Spacer(flex: 1),
         ],
       ),
     );

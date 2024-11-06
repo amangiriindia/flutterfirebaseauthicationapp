@@ -63,6 +63,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'email': email,
       });
 
+
       // Navigate to GetStartedScreen
       Navigator.pushReplacement(
         context,
