@@ -65,7 +65,7 @@ class DefaultFirebaseOptions {
     projectId: 'as-academy-a7a8f',
     storageBucket: 'as-academy-a7a8f.firebasestorage.app',
     iosClientId: '392556895404-ll8l9ai44uhodso592r6l368lshokpre.apps.googleusercontent.com',
-    iosBundleId: 'com.example.incrementorstest',
+    iosBundleId: 'com.aman.incrementorstest',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -75,7 +75,7 @@ class DefaultFirebaseOptions {
     projectId: 'as-academy-a7a8f',
     storageBucket: 'as-academy-a7a8f.firebasestorage.app',
     iosClientId: '392556895404-ll8l9ai44uhodso592r6l368lshokpre.apps.googleusercontent.com',
-    iosBundleId: 'com.example.incrementorstest',
+    iosBundleId: 'com.aman.incrementorstest',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

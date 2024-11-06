@@ -1,10 +1,7 @@
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration
+    id 'com.google.gms.google-services' // FlutterFire configuration
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -26,8 +23,17 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+// Load key.properties for signing configurations
+def keyProperties = new Properties()
+def keyPropertiesFile = rootProject.file("key.properties")
+if (keyPropertiesFile.exists()) {
+    keyPropertiesFile.withReader("UTF-8") { reader ->
+        keyProperties.load(reader)
+    }
+}
+
 android {
-    namespace = "com.example.incrementorstest"
+    namespace = "com.aman.incrementorstest"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -37,24 +43,32 @@ android {
     }
 
     defaultConfig {
-    // Unique Application ID for your Flutter app
-    applicationId "com.example.incrementorstest" // Replace with your actual package name if needed
-    
-    // Set the minimum and target SDK versions
-    minSdkVersion 23
-    targetSdkVersion flutter.targetSdkVersion // Automatically use the target SDK version defined in Flutter
-    
-    // Set the version code and name
-    versionCode flutterVersionCode.toInteger()
-    versionName flutterVersionName
-}
+        // Unique Application ID for your Flutter app
+        applicationId "com.aman.incrementorstest"  // Replace with your actual package name if needed
 
+        // Set the minimum and target SDK versions
+        minSdkVersion 23
+        targetSdkVersion flutter.targetSdkVersion // Automatically use the target SDK version defined in Flutter
+
+        // Set the version code and name
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            // Ensure this points to the correct location of your keystore file
+            storeFile file("/assigment.keystore")
+            storePassword "12345678"
+            keyAlias "assigment"
+            keyPassword "12345678"
+        }
+    }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            // Use the release signing config
+            signingConfig signingConfigs.release
         }
     }
 }
