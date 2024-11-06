@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:incrementorstest/component/custom_appbar.dart';
 import 'package:incrementorstest/component/custom_buttom.dart';
@@ -5,6 +6,8 @@ import 'package:incrementorstest/component/input_feild.dart';
 import 'package:incrementorstest/component/input_feild_password.dart';
 import 'package:incrementorstest/screen/get_started_screen.dart';
 import 'package:incrementorstest/screen/registration_screen.dart';
+import '../component/forget_password_popup.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +20,35 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
+  String? _errorMessage;
+
+  // Method to show the Forgot Password dialog
+
+  // Method to show Snackbar for feedback
+  Future<User?> _signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        return null; // The user canceled the sign-in
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return userCredential.user;
+    } catch (e) {
+      print(e); // Handle error appropriately
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +99,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 });
               },
             ),
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  _errorMessage!,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             const SizedBox(height: 3),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {
-                  // Handle Forgot Password action
-                },
+                onPressed: () => showForgotPasswordDialog(
+                    context), // Open Forgot Password dialog
                 child: const Text(
                   'Forgot Password',
                   style: TextStyle(
@@ -90,7 +133,6 @@ class _LoginScreenState extends State<LoginScreen> {
             Center(
               child: TextButton(
                 onPressed: () {
-                  // Handle the action to redirect to login screen or any other action
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -113,11 +155,22 @@ class _LoginScreenState extends State<LoginScreen> {
             Center(
               child: CustomButton(
                 backgroundColor: const Color(0xFF2355C4),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GetStartedScreen()),
-                  );
+                onPressed: () async {
+                  try {
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GetStartedScreen()),
+                    );
+                  } catch (e) {
+                    setState(() {
+                      _errorMessage = "Invalid email or password.";
+                    });
+                  }
                 },
                 text: 'Login',
               ),
@@ -148,11 +201,22 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 24),
             Center(
               child: ElevatedButton.icon(
-                onPressed: () {
-                  // Handle Google Login action
+                onPressed: () async {
+                  User? user = await _signInWithGoogle();
+                  if (user != null) {
+                    // Navigate to next screen after successful sign-in
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GetStartedScreen()),
+                    );
+                  } else {
+                    // Show an error message or snack bar if sign-in fails
+                    print('google sign feild');
+                  }
                 },
                 icon: Image.asset(
-                  'assets/icon/google_icon.png', // Make sure to add the Google logo to assets
+                  'assets/icon/google_icon.png', // Ensure the Google logo is added to assets
                   width: 24,
                   height: 24,
                 ),
@@ -175,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

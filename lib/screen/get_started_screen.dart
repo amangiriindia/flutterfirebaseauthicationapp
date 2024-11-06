@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:incrementorstest/component/custom_buttom.dart';
-
+import 'home_screen.dart';
 
 class GetStartedScreen extends StatefulWidget {
   @override
@@ -22,10 +22,19 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-        if (userDoc.exists) {
+        // Try to get the user's display name from Google sign-in
+        setState(() {
+          userName = user.displayName ?? "User";
+        });
+
+        // Optional: Check Firestore for additional user details if necessary
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        if (userDoc.exists && userDoc.data()?['name'] != null) {
           setState(() {
-            userName = userDoc.data()?['name'] ?? "User";
+            userName = userDoc.data()?['name'];
           });
         }
       }
@@ -79,7 +88,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GetStartedScreen()),
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
               },
               text: 'Get Started',
