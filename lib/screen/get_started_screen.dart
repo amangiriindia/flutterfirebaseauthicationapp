@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:incrementorstest/component/custom_buttom.dart';
 
 class GetStartedScreen extends StatelessWidget {
   @override
@@ -56,33 +57,15 @@ class GetStartedScreen extends StatelessWidget {
           ),
           // Get Started Button
           Center(
-            child: ElevatedButton(
+            child: CustomButton(
+              backgroundColor: const Color(0xFF59C1F2),
               onPressed: () {
-                // Navigate to the next screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => GetStartedScreen()),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF59C1F2),
-                minimumSize: const Size(327, 56),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: const Text(
-                'Get Started',
-                style: TextStyle(
-                  fontFamily: 'Manrope',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  height: 24 / 16,
-                ),
-              ),
+              text: 'Get Started',
             ),
           ),
           Spacer(

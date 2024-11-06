@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:incrementorstest/component/custom_appbar.dart';
+import 'package:incrementorstest/component/custom_buttom.dart';
+import 'package:incrementorstest/component/input_feild.dart';
+import 'package:incrementorstest/component/input_feild_password.dart';
+import 'package:incrementorstest/screen/get_started_screen.dart';
 import 'package:incrementorstest/screen/registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,40 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Joby',
-                  style: TextStyle(
-                    fontFamily: 'Manrope',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.01,
-                    color: Color(0xFF2355C4),
-                  ),
-                ),
-                TextSpan(
-                  text: '.',
-                  style: TextStyle(
-                    fontFamily: 'Manrope',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.01,
-                    color: Color(0xFF59C1F2),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -79,13 +51,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            _buildInputField(
+            buildInputField(
               controller: _emailController,
               hintText: 'Enter your email address',
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 16),
-            _buildPasswordField(
+            buildPasswordField(
               controller: _passwordController,
               hintText: 'Password',
               isPasswordVisible: _isPasswordVisible,
@@ -121,7 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Handle the action to redirect to login screen or any other action
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RegistrationScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => RegistrationScreen()),
                   );
                 },
                 child: const Text(
@@ -138,29 +111,15 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             Center(
-              child: ElevatedButton(
+              child: CustomButton(
+                backgroundColor: const Color(0xFF2355C4),
                 onPressed: () {
-                  // Handle login action
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GetStartedScreen()),
+                  );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2355C4),
-                  minimumSize: const Size(327, 56),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                ),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontFamily: 'Manrope',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    height: 24 / 16,
-                  ),
-                ),
+                text: 'Login',
               ),
             ),
             const SizedBox(height: 24),
@@ -218,76 +177,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String hintText,
-    TextInputType? keyboardType,
-  }) {
-    return Container(
-      width: 327,
-      height: 52,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFEFEFEF)),
-      ),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hintText,
-          hintStyle: const TextStyle(
-            fontFamily: 'Manrope',
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Color(0xFF75788D),
-          ),
-        ),
-        keyboardType: keyboardType,
-      ),
-    );
-  }
-
-  Widget _buildPasswordField({
-    required TextEditingController controller,
-    required String hintText,
-    required bool isPasswordVisible,
-    required VoidCallback togglePasswordVisibility,
-  }) {
-    return Container(
-      width: 327,
-      height: 52,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFEFEFEF)),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: !isPasswordVisible,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hintText,
-          hintStyle: const TextStyle(
-            fontFamily: 'Manrope',
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Color(0xFF75788D),
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              isPasswordVisible
-                  ? Icons.visibility_outlined
-                  : Icons.visibility_off_outlined,
-              color: const Color(0xFF75788D),
-            ),
-            onPressed: togglePasswordVisibility,
-          ),
         ),
       ),
     );
